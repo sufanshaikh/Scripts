@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+git_repo="https://github.com/sufanshaikh/my_website.git"
+temp_dir="/tmp/webrepo"
+dest_dir="/var/www/html"
+
+apt update -y
+apt install nginx git -y
+
+systemctl enable nginx
+systemctl start nginx
+
+rm -rf $dest_dir/*
+rm -rf $temp_dir
+
+git clone $git_repo $temp_dir
+
+cp -r $temp_dir/* $dest_dir/
+
+chown -R www-data:www-data $dest_dir
+chmod -R 755 $dest_dir
+
+systemctl restart nginx
