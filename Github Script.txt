@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+git_repo="https://github.com/sufanshaikh/my_website.git"
+dest_dir="/var/www/html"
+Port=80
+
+echo "Updating System ..."
+sudo apt update && sudo apt upgrade
+
+echo "Installing Nginx and Git ...."
+sudo apt install nginx git -y
+
+echo "Enabling and starting Nginx ..."
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
+echo "Cleaning default Directory...."
+sudo rm -rf $dest_dir/*
+
+echo "Clonening Your Static Website...."
+sudo cp -r /tmp/webrepo/* $dest_dir 
+
+echo "Setting Correct Permission..."
+sudo chown -R www-data:ww-data $dest_dir
+sudo chmod -r 755 $dest_dir
+
+echo "Testing Nginx Configration..."
+sudo nginx -t
+
+echo "Reloading Nginx ...."
+sudo systemctl reload nginx
+
+echo "<<<<<,.....Deployment Complete.....>>>>>"
