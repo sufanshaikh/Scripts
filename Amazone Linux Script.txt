@@ -10,7 +10,7 @@ systemctl enable nginx
 rm -rf /tmp/my_website
 
 # Clone the directory
-git clone https://github.com/sufanshaikh/my_website.git /tmp/mywebsite
+git clone https://github.com/sufanshaikh/my_website.git /tmp/my_website
 
 # Changed to the cloned Directory 
 cd /tmp/my_website || exit 1
