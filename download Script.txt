@@ -1,0 +1,35 @@
+!/bin/bash
+
+#Exit on Error
+set -e
+
+# 1. Install Virtual Host nginx enable and start
+echo "Installing Nginx"
+sudo apt update
+sudo apt install -y nginx
+
+echo " Enabling and Starting nginx..."
+sudo systemctl enable nginx 
+sudo systemctl start nginx 
+
+echo "Installing zip and unzip"
+sudo apt install -y zip unzip wget
+
+dow_url="https://html5up.net/twenty/download"
+tmp_dir="/tmp"
+mkdir -p "$tmp_dir"
+
+echo "Downloading Template"
+wget -O "$tmp_dir/template.zip" "$dow_url"
+
+echo "Extracting Template"
+unzip -o "$tmp_dir/template.zip" -d "$tmp_dir"
+
+echo "Deploying Files to /var/www/html/..."
+sudo rm -rf /var/www/html/*
+sudo cp -r "$tmp_dir"/* /var/www/html/
+
+echo "Restarting Nginx"
+sudo systemctl restart nginx
+
+echo "Deployment Complete"
