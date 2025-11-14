@@ -2,11 +2,12 @@
 set -e
 
 git_repo="https://github.com/sufanshaikh/my_website.git"
+temp_dir="/tmp/webrepo"
 dest_dir="/var/www/html"
 Port=80
 
 echo "Updating System ..."
-sudo apt update && sudo apt upgrade
+sudo apt update -y && sudo apt upgrade -y
 
 echo "Installing Nginx and Git ...."
 sudo apt install nginx git -y
@@ -18,17 +19,21 @@ sudo systemctl start nginx
 echo "Cleaning default Directory...."
 sudo rm -rf $dest_dir/*
 
-echo "Clonening Your Static Website...."
-sudo cp -r /tmp/webrepo/* $dest_dir 
+echo "Cloning Your Static Website...."
+sudo rm -rf $temp_dir
+git clone $git_repo $temp_dir
+
+echo "Copying files to web root..."
+sudo cp -r $temp_dir/* $dest_dir/
 
 echo "Setting Correct Permission..."
-sudo chown -R www-data:ww-data $dest_dir
-sudo chmod -r 755 $dest_dir
+sudo chown -R www-data:www-data $dest_dir
+sudo chmod -R 755 $dest_dir
 
-echo "Testing Nginx Configration..."
+echo "Testing Nginx Configuration..."
 sudo nginx -t
 
 echo "Reloading Nginx ...."
 sudo systemctl reload nginx
 
-echo "<<<<<,.....Deployment Complete.....>>>>>"
+echo "<<<<<.....Deployment Complete.....>>>>>"
