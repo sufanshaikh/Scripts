@@ -1,0 +1,28 @@
+# Updating System and Install Packages
+yum update -y
+yum install nginx zip unzip git -y 
+
+# Start and Enable nginx
+systemctl start nginx
+systemctl enable nginx
+
+# Remove any Existing Cloned directory 
+rm -rf /tmp/my_website
+
+# Clone the directory
+git clone https://github.com/sufanshaikh/my_website.git /tmp/mywebsite
+
+# Changed to the cloned Directory 
+cd /tmp/my_website || exit 1
+unzip '*.zip' extracted 2>/dev/null 
+
+# Remove nginx HTML Files
+rm -rf /usr/share/nginx/html/*
+
+# Copy unzipped or direct repo content to nginx 
+cp -r extracted/* /usr/share/nginx/html/ 2>/dev/null || cp -r * /usr/share/nginx/html
+
+#Restart nginx to Apply Changes
+systemctl restart nginx
+
+echo "<<<..... Website is Here .....>>>"
