@@ -1,0 +1,16 @@
+#!/bin/bash
+
+yum update -y
+yum install nginx git unzip zip -y
+
+systemctl enable nginx
+systemctl start nginx
+
+rm -rf /usr/share/nginx/html/*
+
+rm -rf /tmp/my_website
+git clone https://github.com/sufanshaikh/my_website.git /tmp/my_website
+
+cp -r /tmp/my_website/* /usr/share/nginx/html/
+
+systemctl restart nginx
